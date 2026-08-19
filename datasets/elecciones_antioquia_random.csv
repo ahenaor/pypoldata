@@ -1,0 +1,26 @@
+municipio,subregion,poblacion,habilitados,votantes,votos_nulos,categoria_municipio,indice_ruralidad,presencia_armada,NBI
+Medellín,Valle de Aburrá,2569007,1823000,1012500,18230,Especial,0.12,False,12.3
+Bello,Valle de Aburrá,678125,412000,189500,4120,1,0.18,False,18.7
+Envigado,Valle de Aburrá,252478,178000,115400,1780,2,0.08,False,8.4
+Itagüí,Valle de Aburrá,294855,195000,109200,2340,1,0.1,False,14.2
+Rionegro,Oriente,134567,98000,62700,980,3,0.35,False,16.8
+Apartadó,Urabá,205421,98000,31200,1960,4,0.62,True,52.1
+Turbo,Urabá,178234,76500,22100,2295,4,0.78,True,67.8
+Caucasia,Bajo Cauca,123456,76500,28900,1530,4,0.65,True,58.3
+El Bagre,Bajo Cauca,52340,28000,8400,560,6,0.82,True,72.4
+Zaragoza,Bajo Cauca,34210,18500,5180,370,6,0.88,True,78.9
+Santa Fe de Antioquia,Occidente,28450,18200,10920,273,6,0.71,False,38.2
+Andes,Suroeste,47890,31000,17670,465,6,0.68,False,32.1
+Jardín,Suroeste,18234,12500,8750,125,6,0.75,False,28.5
+Jericó,Suroeste,14567,10200,7344,102,6,0.72,False,25.3
+Támesis,Suroeste,16890,11800,7670,118,6,0.7,False,30.7
+La Ceja,Oriente,62345,42000,29400,630,5,0.4,False,15.6
+El Carmen de Viboral,Oriente,54321,36000,23040,540,5,0.55,False,22.4
+Marinilla,Oriente,58900,39000,25740,585,5,0.48,False,19.8
+Guatapé,Oriente,7234,5200,3796,52,6,0.6,False,24.1
+El Peñol,Oriente,18456,12800,8960,192,6,0.58,False,27.3
+Yarumal,Norte,52100,34000,17680,510,5,0.52,True,35.6
+Santa Rosa de Osos,Norte,38900,25000,14750,375,6,0.63,False,31.2
+Donmatías,Norte,24567,16000,10560,240,6,0.56,False,26.8
+Cisneros,Nordeste,12345,8500,4760,170,6,0.67,False,42.1
+Amalfi,Nordeste,28900,19000,9120,380,6,0.73,True,45.7
