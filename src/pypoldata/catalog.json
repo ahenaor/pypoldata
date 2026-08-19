@@ -1,4 +1,31 @@
 {
-  "updated_at": "2026-08-10T00:00:00Z",
-  "datasets": {}
+  "catalog_version": "0.1.0",
+  "datasets": {
+    "colombia_municipios": {
+      "title": "Límites Municipales de Colombia",
+      "description": "Cartografía vectorial de los municipios de Colombia.",
+      "latest_version": "1.0.0",
+      "versions": {
+        "1.0.0": {
+          "data_release": "data-v2026.08",
+          "artifacts": {
+            "data": {
+              "asset_name": "colombia_municipios.parquet",
+              "format": "geoparquet",
+              "sha256": "1a7d3a2150b5c38f03faf28561f3565a9bfb5894701b159e082eca9b2b6cfd83"
+            }
+          },
+          "source": {
+            "name": "DANE / IGAC",
+            "url": "https://geoportal.dane.gov.co",
+            "accessed_at": "2026-08-18"
+          },
+          "license": "CC-BY-4.0",
+          "unit_of_analysis": "municipio",
+          "geography": "Colombia",
+          "time_coverage": "2022"
+        }
+      }
+    }
+  }
 }
