@@ -216,5 +216,6 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+notebook/
 notebook/colombia_municipios.geojson
 notebook/info.txt
