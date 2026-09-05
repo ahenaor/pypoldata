@@ -1,7 +1,6 @@
 import hashlib
 import json
 import os
-import shutil
 import tempfile
 from importlib import resources
 from pathlib import Path
@@ -65,24 +64,35 @@ def _fetch_asset(
 
     print(f"Descargando {dataset_id} ({asset_name}) desde GitHub...")
 
-    # Descargar a un archivo temporal primero para evitar archivos corruptos
-    with tempfile.NamedTemporaryFile(delete=False, dir=cache_dir) as tmp_file:
-        tmp_path = Path(tmp_file.name)
-        with requests.get(url, stream=True, timeout=60) as response:
-            response.raise_for_status()
-            for chunk in response.iter_content(chunk_size=65536):
-                tmp_file.write(chunk)
+    # El temporal comparte sistema de archivos con el destino para el reemplazo atómico.
+    tmp_path = None
+    try:
+        with tempfile.NamedTemporaryFile(delete=False, dir=cache_dir) as tmp_file:
+            tmp_path = Path(tmp_file.name)
+            try:
+                with requests.get(url, stream=True, timeout=60) as response:
+                    response.raise_for_status()
+                    for chunk in response.iter_content(chunk_size=65536):
+                        tmp_file.write(chunk)
+            except requests.RequestException as exc:
+                raise requests.RequestException(
+                    f"No se pudo descargar '{dataset_id}' (versión {version}, "
+                    f"archivo {asset_name}) desde {url}: {exc}",
+                    request=exc.request,
+                    response=exc.response,
+                ) from exc
 
-    # Validar integridad
-    if not _verify_sha256(tmp_path, expected_sha):
-        tmp_path.unlink()
-        raise ValueError(
-            f"Error de integridad: el hash SHA-256 de {asset_name} no coincide con el catálogo."
-        )
+        if not _verify_sha256(tmp_path, expected_sha):
+            raise ValueError(
+                f"Error de integridad: el hash SHA-256 de {asset_name} "
+                f"para '{dataset_id}' (versión {version}) no coincide con el catálogo."
+            )
 
-    # Mover el archivo ya validado a su ubicación definitiva en caché
-    shutil.move(str(tmp_path), str(target_file))
-    return target_file
+        os.replace(tmp_path, target_file)
+        return target_file
+    finally:
+        if tmp_path is not None:
+            tmp_path.unlink(missing_ok=True)
 
 
 def list_datasets() -> list[dict]:

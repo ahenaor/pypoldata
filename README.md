@@ -23,6 +23,14 @@ PyPolData resuelve esto combinando **formatos analíticos modernos (Parquet / Ge
 
 ## 🚀 Instalación
 
+Disponible en [PyPI](https://pypi.org/project/pypoldata/). Requiere Python 3.10 o superior:
+
+```bash
+pip install pypoldata
+```
+
+Para trabajar en el desarrollo del paquete:
+
 ```bash
 # Clonar el repositorio
 git clone https://github.com/ahenaor/pypoldata.git
@@ -30,11 +38,6 @@ cd pypoldata
 
 # Instalar en modo desarrollo / editable
 pip install -e .
-```
-
-*Próximamente disponible vía PyPI:*
-```bash
-pip install pypoldata
 ```
 
 ---
@@ -50,17 +53,47 @@ ppd.list_datasets()
 ```
 
 ### 2. Cargar un dataset analítico
-Carga datos directamente a memoria (`pandas.DataFrame` o `geopandas.GeoDataFrame`). La primera llamada descarga el artefacto optimizado a tu caché local verificando su huella SHA-256; las siguientes llamadas son instantáneas y funcionan sin conexión.
+Carga datos directamente a memoria (`pandas.DataFrame` o `geopandas.GeoDataFrame`). La primera llamada descarga el artefacto optimizado a tu caché local verificando su huella SHA-256. Las siguientes llamadas funcionan sin conexión si el archivo está en caché y su hash coincide con el catálogo; cada carga vuelve a verificar el hash y leer el archivo en memoria.
 
 ```python
 import pypoldata as ppd
+import matplotlib.pyplot as plt
 
 # Cargar cartografía municipal de Colombia optimizada en GeoParquet
 gdf = ppd.load("colombia_municipios")
 
 # Visualizar
 gdf.plot(color="#e0f3f8", edgecolor="#1b7837", linewidth=0.5)
+plt.show()
 ```
+
+### 3. Fijar la versión del dataset
+
+Para documentar un análisis reproducible, especifica la versión de los datos y registra también la versión del paquete y del entorno:
+
+```python
+gdf = ppd.load("colombia_municipios", version="1.0.0")
+print(ppd.__version__)
+```
+
+El valor predeterminado, `version="latest"`, selecciona la versión indicada en el catálogo incluido en el paquete instalado. Puede cambiar al actualizar PyPolData; no consulta un catálogo remoto.
+
+### 4. Configurar la caché y volver a descargar
+
+```python
+# Guardar los datos en una carpeta elegida
+gdf = ppd.load("colombia_municipios", version="1.0.0", data_home="./datos")
+
+# Descargar de nuevo la misma versión, aunque exista una copia válida
+gdf = ppd.load(
+    "colombia_municipios",
+    version="1.0.0",
+    data_home="./datos",
+    force_download=True,
+)
+```
+
+La ubicación se elige en este orden: `data_home`, variable de entorno `PYPOLDATA_DATA_HOME` y caché del sistema operativo determinada por `platformdirs`. `force_download=True` requiere conexión y reemplaza la copia anterior únicamente después de verificar la nueva descarga. Una copia ausente o con hash incorrecto también provoca una descarga.
 
 ---
 
@@ -74,8 +107,8 @@ gdf.plot(color="#e0f3f8", edgecolor="#1b7837", linewidth=0.5)
 
 ## ⚙️ Arquitectura y Principios de Diseño
 
-1. **Separación entre Código y Datos:** La versión del paquete (`v0.1.0`), las versiones de los datasets (`1.0.0`) y las etiquetas de release de datos (`data-v2026.08`) se gestionan de manera independiente.
-2. **Integridad por Defecto:** Todo archivo descargado es validado contra su hash **SHA-256** registrado en el catálogo central. Si el archivo sufre alteraciones o descargas truncadas, se rechaza de forma atómica.
+1. **Separación entre Código y Datos:** La versión del paquete (`0.1.2`), las versiones de los datasets (`1.0.0`) y las etiquetas de release de datos (`data-v2026.08`) se gestionan de manera independiente.
+2. **Integridad por Defecto:** Todo archivo descargado es validado contra su hash **SHA-256** registrado en el catálogo incluido en el paquete. Solo una descarga validada reemplaza de forma atómica el archivo de caché; los temporales se eliminan también si ocurre un error de descarga o validación.
 3. **Caché Inteligente:** Los archivos se almacenan localmente respetando los estándares del sistema operativo (vía `platformdirs` o la variable de entorno `PYPOLDATA_DATA_HOME`).
 4. **Eficiencia Analítica:** Estandarización sobre **Parquet / GeoParquet** con compresión nativa, preservando tipos de datos y reduciendo el consumo de ancho de banda hasta en un 98%.
 
