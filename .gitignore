@@ -6,6 +6,8 @@ __pycache__/
 # C extensions
 *.so
 
+dev_
+
 # Distribution / packaging
 .Python
 build/
@@ -216,6 +218,8 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
-notebook/
-notebook/colombia_municipios.geojson
-notebook/info.txt
+dev_notebook/
+dev_notebook/colombia_municipios.geojson
+dev_notebook/info.txt
+dev_notebook/colombia_municipios.geojson
+dev_notebook/info.txt
